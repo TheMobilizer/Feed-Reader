@@ -1,90 +1,59 @@
+import 'package:dart_rss/dart_rss.dart';
 import 'package:flutter/material.dart';
-
+import 'package:reader/model/fetch.dart';
 void main() {
-  runApp( MyApp());
+  //Fetcher().fphello();
+  runApp( 
+    MaterialApp(
+      title: "WIP:Reader",
+      home: MainApp(fetcher: Fetcher()),
+      ),
+    );
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
 
-  // This widget is the root of your application.
-  final List<String> fruits = ['apple', 'banana', 'grape', 'orange', 'kiwi'];
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'My Reader',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text("Mreader"),
-      ),
-      body: ListView.builder(
-              //padding: const EdgeInsets.all(8),
-              //shrinkWrap: true,
-              itemCount: fruits.length,
-              itemBuilder: (context,index){
-                return(Center(child: Container(color: Colors.deepPurple, width: 100, child: Center(child: Text(fruits[index])))));
-              } 
-            ),
-          )
-        
-      );
-  }
-}
 
-/*class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  
-  // always marked "final".
-
-  final String title;
+class MainApp extends StatefulWidget {
+  const MainApp({super.key, required this.fetcher});
+  final Fetcher fetcher;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MainApp> createState() => _MainAppState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _MainAppState extends State<MainApp>{
+  List<RssItem> _feedItems = [];
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  @override
+  void initState() {
+    super.initState();
+    widget.fetcher.fetchAll().then((value){
+      setState(() {
+        _feedItems = value;
+      });
+      
+    }
+    );
+    print(_feedItems.length);
+
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: const Text("Feed Reader"),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+      body: ListView.builder(
+        itemCount: _feedItems.length,
+        itemBuilder: (context, index){
+          final item = _feedItems[index];
+          print("Inside Item Builder");
+          print(_feedItems.length);
+          return Text(item.title??"No title provided");
+        },
+        )
     );
   }
-}*/
+
+}
