@@ -1,6 +1,7 @@
 import 'package:dart_rss/dart_rss.dart';
 import 'package:flutter/material.dart';
 import 'package:reader/model/fetch.dart';
+import 'package:reader/view/item_tile.dart';
 void main() {
   //Fetcher().fphello();
   runApp( 
@@ -50,7 +51,11 @@ class _MainAppState extends State<MainApp>{
           final item = _feedItems[index];
           print("Inside Item Builder");
           print(_feedItems.length);
-          return Text(item.title??"No title provided");
+          //return Text(item.title??"No title provided");
+          return ItemTile(
+            title: item.title??"no title",
+            link: item.link??"",
+          );
         },
         )
     );
