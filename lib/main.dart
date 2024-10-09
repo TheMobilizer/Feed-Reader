@@ -45,19 +45,27 @@ class _MainAppState extends State<MainApp>{
       appBar: AppBar(
         title: const Text("Feed Reader"),
       ),
-      body: ListView.builder(
-        itemCount: _feedItems.length,
-        itemBuilder: (context, index){
-          final item = _feedItems[index];
-          print("Inside Item Builder");
-          print(_feedItems.length);
-          //return Text(item.title??"No title provided");
-          return ItemTile(
-            title: item.title??"no title",
-            link: item.link??"",
-          );
-        },
+      body: Align(
+        alignment: Alignment.center,
+        child:SizedBox(
+
+          width: 400,
+          
+          child: ListView.builder(
+            itemCount: _feedItems.length,
+            itemBuilder: (context, index){
+              final item = _feedItems[index];
+              print("Inside Item Builder");
+              print(_feedItems.length);
+              //return Text(item.title??"No title provided");
+              return ItemTile(
+                title: item.title??"no title",
+                link: item.link??"",
+              );
+            },
+          )
         )
+      )
     );
   }
 
